@@ -1,72 +1,92 @@
-use std::sync::Arc;
+mod config;
+mod proto;
+mod ui;
 
+use std::{sync::Arc, time::Duration};
+use config::{AppConfig, CliArgs, ProtocolType};
+use proto::{Protocol, irc::IrcProtocol};
 use clap::Parser;
-use colored::Color;
-use config::{configure, get_config_path, load_config, Args, Context};
-use proto::{connect, read_messages, send_message};
-use regex::Regex;
-use lazy_static::lazy_static;
-use chat::run_main_loop;
+use tokio::sync::mpsc;
 
+#[tokio::main]
+async fn main() -> Result<(), Box<dyn std::error::Error>> {
+    let args = CliArgs::parse();
+    let mut config = config::load_config(args.config)?;
+    
+    if args.add_server {
+        add_server_interactively(&mut config).await?;
+        config::save_config(&config, &config::default_config_path())?;
+        return Ok(());
+    }
 
-lazy_static! {
-    static ref DATE_REGEX: Regex = Regex::new(r"\[(.*?)\] (.*)").unwrap();
-    static ref IP_REGEX: Regex = Regex::new(r"\{(.*?)\} (.*)").unwrap();
-    static ref COLORED_USERNAMES: Vec<(Regex, Color)> = vec![
-        (Regex::new(r"\u{B9AC}\u{3E70}<(.*?)> (.*)").unwrap(), Color::Green),             // bRAC
-        (Regex::new(r"\u{2550}\u{2550}\u{2550}<(.*?)> (.*)").unwrap(), Color::BrightRed), // CRAB
-        (Regex::new(r"\u{00B0}\u{0298}<(.*?)> (.*)").unwrap(), Color::Magenta),           // Mefidroniy
-        (Regex::new(r"<(.*?)> (.*)").unwrap(), Color::Cyan),                              // clRAC
-    ];
+    let mut ui = ui::TerminalUI::new()?;
+    let (tx, mut rx) = mpsc::channel(100);
+    
+    // Запуск обработки сообщений
+    tokio::spawn(async move {
+        for server in &mut config.servers {
+            let mut protocol: Box<dyn Protocol> = match server.protocol {
+                ProtocolType::BRAC => Box::new(proto::brac::BracProtocol::new()),
+                ProtocolType::IRC => Box::new(IrcProtocol::new()),
+            };
+            
+            if let Err(e) = protocol.connect(&server.host, server.ssl).await {
+                eprintln!("Connection error: {}", e);
+                continue;
+            }
+            
+            server.connection = Some(Arc::new(Mutex::new(protocol)));
+        }
+        
+        loop {
+            for server in &mut config.servers {
+                if let Some(conn) = &server.connection {
+                    let mut conn = conn.lock().await;
+                    if let Ok(messages) = conn.read_messages().await {
+                        for msg in messages {
+                            tx.send(msg).await.unwrap();
+                        }
+                    }
+                }
+            }
+            tokio::time::sleep(Duration::from_millis(config.update_interval)).await;
+        }
+    });
+    
+    // Основной цикл UI
+    let mut messages = Vec::new();
+    let mut input = String::new();
+    
+    loop {
+        while let Ok(msg) = rx.try_recv() {
+            messages.push(msg);
+            if messages.len() > 100 {
+                messages.remove(0);
+            }
+        }
+        
+        ui.draw(&config.servers, &messages, &input)?;
+        
+        if event::poll(Duration::from_millis(100))? {
+            if let Event::Key(key) = event::read()? {
+                match key.code {
+                    KeyCode::Char(c) => input.push(c),
+                    KeyCode::Backspace => { input.pop(); }
+                    KeyCode::Enter => {
+                        // Отправка сообщения
+                        input.clear();
+                    }
+                    KeyCode::Esc => break,
+                    _ => {}
+                }
+            }
+        }
+    }
+    
+    Ok(())
 }
 
-
-mod config;
-mod chat;
-mod proto;
-mod util;
-
-
-fn main() {
-    let args = Args::parse();
-    
-    let config_path = get_config_path();
-
-    if args.config_path {
-        print!("{}", config_path.to_string_lossy());
-        return;
-    }
-
-    if args.configure {
-        configure(config_path);
-        return;
-    }
-
-    let config = load_config(config_path);
-    
-    let ctx = Arc::new(Context::new(&config, &args));
-
-    if args.read_messages {
-        let mut stream = connect(&ctx.host, ctx.enable_ssl).expect("Error reading message");
-        print!("{}", read_messages(
-                &mut stream, 
-                ctx.max_messages, 
-                0,
-                !ctx.enable_ssl,
-                false
-            )
-            .ok().flatten()
-            .expect("Error reading messages").0.join("\n")
-        );
-    }
-
-    if let Some(message) = &args.send_message {
-        send_message(&mut connect(&ctx.host, ctx.enable_ssl).expect("Error sending message"), message).expect("Error sending message");
-    }
-
-    if args.send_message.is_some() || args.read_messages {
-        return;
-    }
-
-    run_main_loop(ctx.clone());
+async fn add_server_interactively(config: &mut AppConfig) -> Result<(), Box<dyn std::error::Error>> {
+    // Реализация интерактивного добавления сервера
+    Ok(())
 }
