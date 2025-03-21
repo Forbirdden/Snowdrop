@@ -1,5 +1,5 @@
 {
-  description = "bRAC - better RAC client";
+  description = "Snowdrop - just a messenger";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
@@ -23,8 +23,8 @@
         };
 
         packages.default = pkgs.rustPlatform.buildRustPackage {
-          pname = "bRAC";
-          version = "0.1.1+2.0";
+          pname = "Snowdrop";
+          version = "0.2.0";
           src = pkgs.lib.cleanSource ./.;
 
           cargoLock = {
