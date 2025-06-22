@@ -1,8 +1,10 @@
 # The Snowdrop Messenger
 Roadmap:
-Snowdrop Roadmap:
+
 [x] - WRACS support
+
 [x] - WRAC support
+
 [x] - User Agents
 [x] - Server list Management
 [ ] - Notifications
