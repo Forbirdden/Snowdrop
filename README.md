@@ -7,7 +7,6 @@ Roadmap:
 - [ ] Notifications
 - [ ] Settings
 - [x] Authentication
-- [ ] sRACanyUsr exploit
 - [ ] GitHub repository
 - [ ] Web version
 - [ ] Mobile UI
