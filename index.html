@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Snowdrop Messenger</title>
+    <link rel="stylesheet" href="themes/styles.css">
+</head>
+<body>
+    <div id="app-container">
+        <div id="channel-list">
+            <div id="channel-list-header">
+                <span id="app-title">Snowdrop</span>
+                <button id="header-settings-btn" class="header-settings-btn" title="Настройки">
+                    <svg viewBox="0 0 24 24" fill="none">
+                        <path d="M12 15.5A3.5 3.5 0 1 0 12 8.5a3.5 3.5 0 0 0 0 7Zm7.43-2.5a5.97 5.97 0 0 0 .05-1c0-.34-.02-.67-.05-1l1.94-1.51a.5.5 0 0 0 .12-.64l-1.84-3.18a.5.5 0 0 0-.6-.23l-2.3.92a7.03 7.03 0 0 0-1.73-1l-.35-2.42A.5.5 0 0 0 14 2h-4a.5.5 0 0 0-.5.42l-.35 2.42a7.03 7.03 0 0 0-1.73 1l-2.3-.92a.5.5 0 0 0-.6.23l-1.84 3.18a.5.5 0 0 0 .12.64l1.94 1.51c-.03.33-.05.66-.05 1s.02.67.05 1l-1.94 1.51a.5.5 0 0 0-.12.64l1.84 3.18c.14.24.44.34.7.23l2.3-.92c.53.38 1.11.72 1.73 1l.35 2.42a.5.5 0 0 0 .5.42h4a.5.5 0 0 0 .5-.42l.35-2.42c.62-.28 1.2-.62 1.73-1l2.3.92c.26.11.56.01.7-.23l1.84-3.18a.5.5 0 0 0-.12-.64l-1.94-1.51Z" fill="#aaa" />
+                    </svg>
+                </button>
+            </div>
+            <div id="channels"></div>
+            <button id="add-server-btn">+ Добавить сервер</button>
+        </div>
+        <div id="main">
+            <div id="chat-area"></div>
+            <div id="chat-input-area">
+                <div id="chat-input-row">
+                    <input id="chat-input" type="text" autocomplete="off" placeholder="Написать сообщение...">
+                    <button id="send-btn" title="Отправить">
+                        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M1.265 4.42619C1.04293 2.87167 2.6169 1.67931 4.05323 2.31397L21.8341 10.1706C23.423 10.8727 23.423 13.1273 21.8341 13.8294L4.05323 21.686C2.6169 22.3207 1.04293 21.1283 1.265 19.5738L1.99102 14.4917C2.06002 14.0087 2.41458 13.6156 2.88791 13.4972L8.87688 12L2.88791 10.5028C2.41458 10.3844 2.06002 9.99129 1.99102 9.50829L1.265 4.42619ZM21.0257 12L3.2449 4.14335L3.89484 8.69294L12.8545 10.9328C13.9654 11.2106 13.9654 12.7894 12.8545 13.0672L3.89484 15.3071L3.2449 19.8566L21.0257 12Z" fill="#ffffff"></path>
+                            </g>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Добавление серверов-->
+    <div id="server-modal-bg">
+        <form id="server-modal" onsubmit="return false;">
+            <label for="modal-server-title" id="label-server-title">Название сервера</label>
+            <input id="modal-server-title" maxlength="32" required autocomplete="off" placeholder="Название">
+            <div class="small-row">
+                <div>
+                    <label for="modal-server-address" id="label-server-address">IP/домен</label>
+                    <input id="modal-server-address" maxlength="128" required autocomplete="off" placeholder="0.0.0.0">
+                </div>
+                <div>
+                    <label for="modal-server-port" id="label-server-port">Порт</label>
+                    <input id="modal-server-port" maxlength="6" required autocomplete="off" placeholder="42666" type="number" min="1" max="65535">
+                </div>
+            </div>
+            <label for="modal-server-proto" id="label-server-proto">Протокол</label>
+            <select id="modal-server-proto" required>
+                <option value="wRACs">wRACs</option>
+                <option value="wRAC">wRAC (open snowdrop using http://)</option>
+                <option value="RACs">RACs (WIP)</option>
+                <option value="RAC">RAC (WIP)</option>
+            </select>
+            <label for="modal-server-username" id="label-server-username">Имя пользователя (необязательно)</label>
+            <input id="modal-server-username" maxlength="64" autocomplete="off" placeholder="username">
+            <label for="modal-server-password" id="label-server-password">Пароль (необязательно)</label>
+            <input id="modal-server-password" maxlength="128" type="password" autocomplete="off" placeholder="password">
+            <div id="server-modal-error"></div>
+            <div id="server-modal-btns">
+                <button id="save-server-btn" type="button">Сохранить</button>
+                <button id="cancel-server-btn" type="button">Отмена</button>
+            </div>
+        </form>
+    </div>
+    <!--Настройки -->
+    <div id="settings-modal-bg">
+        <form id="settings-modal" onsubmit="return false;">
+            <label id="settings-label-lang">Language / Язык</label>
+            <div id="settings-modal-lang-row">
+                <select id="settings-lang-select">
+                    <option value="en">English</option>
+                    <option value="ru">Русский</option>
+                </select>
+            </div>
+            <label id="settings-label-format">Message format</label>
+            <input id="settings-format-input" autocomplete="off" maxlength="128">
+            <div class="settings-format-presets">
+                <button type="button" class="settings-format-preset-btn preset-snowdrop" data-format="ඞ&lt;{name}&gt; {text}" data-id="snowdrop">Snowdrop</button>
+                <button type="button" class="settings-format-preset-btn preset-brac" data-format="리㹰&lt;{name}&gt; {text}" data-id="brac">bRAC</button>
+                <button type="button" class="settings-format-preset-btn preset-crab" data-format="═══&lt;{name}&gt; {text}" data-id="crab">CRAB</button>
+                <button type="button" class="settings-format-preset-btn preset-mefidroniy" data-format="°ʘ&lt;{name}&gt; {text}" data-id="mefidroniy">Mefidroniy</button>
+                <button type="button" class="settings-format-preset-btn preset-crack" data-format="⁂&lt;{name}&gt; {text}" data-id="crack">cRACk</button>
+                <button type="button" class="settings-format-preset-btn preset-default" data-format="&lt;{name}&gt; {text}" data-id="default">Default (clRAC)</button>
+            </div>
+            <div id="settings-modal-error"></div>
+            <div id="settings-modal-btns">
+                <button id="save-settings-btn" type="button">Сохранить</button>
+                <button id="cancel-settings-btn" type="button">Отмена</button>
+            </div>
+        </form>
+    </div>
+    <script src="src/script.js"></script> <!--Общие функции-->
+    <script src="proto/wrac.js"></script> <!--Подключение к врак(с) серверам-->
+    <script src="proto/rac.js"></script> <!--Подключение к рак(с) серверам-->
+    <script src="src/chat.js"></script> <!--Логика всего что в области чата происходит-->
+    <script src="src/panel.js"></script> <!--Логика всего что в области панели сервером и в настройках происходит-->
+</body>
+</html>
