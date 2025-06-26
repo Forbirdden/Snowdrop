@@ -7,7 +7,7 @@
             { id: "default", label: "Default (clRAC)", format: "<{name}> {text}", class: "preset-default" }
         ];
         const DEFAULT_SETTINGS = {
-            lang: "ru",
+            lang: "en",
             messageFormat: "ඞ<{name}> {text}",
             messageFormatPreset: "snowdrop"
         };
