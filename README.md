@@ -1,4 +1,9 @@
 # The Snowdrop Messenger
+
+Красивый, удобный и современный мессенджер
+
+![image](https://github.com/user-attachments/assets/8bc4bf84-79bf-49b9-8e32-a6d6570649bd)
+
 Roadmap:
 
 - [x] WRAC(S) support
