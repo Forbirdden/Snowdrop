@@ -11,6 +11,5 @@ Roadmap:
 - [ ] Web version
 - [ ] Mobile UI
 - [ ] Mobile version
-- [ ] Proxy for RAC(S)
 - [ ] RAC(S) support
 - [ ] Desktop Version
