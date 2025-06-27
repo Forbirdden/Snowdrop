@@ -4,7 +4,7 @@ Roadmap:
 - [x] WRAC(S) support
 - [x] User Agents
 - [x] Server list Management
-- [ ] Notifications
+- [ ] Server info packet
 - [ ] Settings
 - [x] Authentication
 - [ ] GitHub repository
