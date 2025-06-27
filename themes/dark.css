@@ -1,0 +1,143 @@
+body {
+    background: #18191c;
+    color: #dee2e6;
+}
+#app-container {
+    background: #18191c;
+}
+#channel-list {
+    background: #141517;
+    border-right: 1px solid #101114;
+}
+#channel-list-header {
+    color: #fff;
+    border-bottom: 1px solid #101114;
+}
+#channels {
+    background: inherit;
+}
+.channel {
+    color: #8a99a8;
+    background: inherit;
+}
+.channel.selected, .channel:hover {
+    background: #23272a;
+    color: #fff;
+}
+.proto-label {
+    color: #fff;
+    background: #5b8fbd;
+}
+.proto-label.wRAC {
+    background: #555;
+}
+.proto-label.wRACs {
+    background: #5b8fbd;
+}
+.proto-label.RAC {
+    background: #aa4000;
+}
+.proto-label.RACs {
+    background: #007c40;
+}
+.channel-title {
+    color: #fff;
+}
+.channel-address {
+    color: #888;
+}
+#add-server-btn {
+    background: #23272a;
+    color: #5b8fbd;
+}
+#add-server-btn:hover {
+    background: #222e39;
+    color: #fff;
+}
+#main {
+    background: #18191c;
+}
+#chat-area {
+    background: #18191c;
+    color: #fff;
+}
+.message .msg {
+    color: #fff;
+}
+.nick-green { color: #18b800; }
+.nick-lightred { color: #ff9191; }
+.nick-lightmagenta { color: #e782ff; }
+.nick-gold { color: #ffd700; }
+.nick-cyan { color: #5b8fbd; }
+.nick-unauth { color: #666; font-style: italic;}
+.nick-amogus { color: #aeff00; }
+.msg { color: #fff; }
+.time { color: #8a8a8a; }
+#chat-input-area {
+    background: #18191c;
+    border-top: 1px solid #101114;
+}
+#chat-input {
+    background: #101114;
+    color: #fff;
+}
+#chat-input:focus {
+    background: #222327;
+}
+#send-btn {
+    background: #5b8fbd;
+    color: #fff;
+}
+#send-btn:active {
+    background: #3976a1;
+}
+#server-modal-bg, #settings-modal-bg {
+    background: rgba(0,0,0,0.65);
+}
+#server-modal, #settings-modal {
+    background: #15171b;
+    color: #ddd;
+    box-shadow: 0 10px 36px #000a;
+}
+#server-modal label, #settings-modal label {
+    color: #ddd;
+}
+#server-modal input, #server-modal select,
+#settings-modal input, #settings-modal select {
+    background: #23272a;
+    color: #fff;
+    border: none;
+}
+#save-server-btn, #save-settings-btn {
+    background: #5b8fbd;
+    color: #fff;
+}
+#save-server-btn:hover, #save-settings-btn:hover {
+    background: #3976a1;
+}
+#cancel-server-btn, #cancel-settings-btn {
+    background: #23272a;
+    color: #aaa;
+}
+#cancel-server-btn:hover, #cancel-settings-btn:hover {
+    background: #393c42;
+    color: #fff;
+}
+#server-modal-error, #settings-modal-error {
+    color: #ff9191;
+}
+.settings-format-preset-btn {
+    background: #23272a;
+    color: #fff;
+}
+.settings-format-preset-btn.selected,
+.settings-format-preset-btn:hover {
+    background: #1c2330;
+}
+.preset-snowdrop { color: #aeff00; }
+.preset-brac { color: #18b800; }
+.preset-crab { color: #ff9191; }
+.preset-mefidroniy { color: #e782ff; }
+.preset-crack { color: #ffd700; }
+.preset-default { color: #5b8fbd; }
+.preset-plain { color: #fff; }
