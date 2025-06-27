@@ -351,6 +351,17 @@ body {
     gap: 17px;
     margin-bottom: 7px;
 }
+
+/* --- DRAG & DROP --- */
+.channel.dragging {
+    opacity: 0.5;
+    border: 2px dashed #99bbee;
+}
+.channel.drag-over {
+    background: #e4eaf1 !important;
+    border: 2px dashed #8db3e6;
+}
+
 @media (max-width: 800px) {
     #app-container {
         flex-direction: column;
