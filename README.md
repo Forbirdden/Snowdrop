@@ -4,10 +4,10 @@ Roadmap:
 - [x] WRAC(S) support
 - [x] User Agents
 - [x] Server list Management
-- [ ] Server info packet
-- [ ] Settings
+- [x] Server info packet
+- [x] Settings
 - [x] Authentication
-- [ ] GitHub repository
+- [ ] Design
 - [ ] Web version
 - [ ] Mobile UI
 - [ ] Mobile version
