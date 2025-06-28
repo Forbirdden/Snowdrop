@@ -89,11 +89,11 @@ function t(key, vars = {}) {
 }
 
 const nickMarkers = [
-    { marker: "\uB9AC\u3E70", color: "nick-green" },         // бракованный
-    { marker: "\u2550\u2550\u2550", color: "nick-lightred" },// краб
-    { marker: "\u00B0\u0298", color: "nick-lightmagenta" },  // меф
-    { marker: "\u2042", color: "nick-gold" },                // кря
-    { marker: "\u0D9E", color: "nick-amogus" },              // сновдроп
+    { marker: "\uB9AC\u3E70", color: "nick-green" },
+    { marker: "\u2550\u2550\u2550", color: "nick-lightred" },
+    { marker: "\u00B0\u0298", color: "nick-lightmagenta" },
+    { marker: "\u2042", color: "nick-gold" },
+    { marker: "\u0D9E", color: "nick-amogus" },
 ];
 
 window.onload = () => { fetchMessages(); };

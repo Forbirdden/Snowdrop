@@ -62,11 +62,11 @@ function showMessages() {
     for (let msg of displayMessages) {
         let { nick, text, date, colorClass } = parseMsg(msg);
         chat.innerHTML += `
-                  <div class="message">
-                    <span class="nick ${colorClass}">${nick ? nick : ""}</span>
-                    <span class="msg">${(text ?? "").replace(/</g, "&lt;").replace(/\n/g, "<br>")}</span>
-                    <span class="time">${date ? "[" + date + "]" : ""}</span>
-                  </div>`;
+            <div class="message">
+                <span class="nick ${colorClass}">${nick ? nick : ""}</span>
+                <span class="msg">${(text ?? "").replace(/</g, "&lt;").replace(/\n/g, "<br>")}</span>
+                <span class="time">${date ? "[" + date + "]" : ""}</span>
+            </div>`;
     }
 }
 
