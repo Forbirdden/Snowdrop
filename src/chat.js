@@ -63,16 +63,46 @@ function getVisibleMessages(messages) {
     return messages;
 }
 
+if (window.marked) {
+    marked.setOptions({
+        breaks: true,
+        gfm: true,
+        smartypants: true
+    });
+    
+    const renderer = new marked.Renderer();
+    renderer.link = function(href, title, text) {
+        return `<a href="${href}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+    };
+    marked.setOptions({ renderer });
+}
+
 function showMessages() {
     let chat = document.getElementById('chat-area');
     chat.innerHTML = '';
     let displayMessages = getVisibleMessages([...messages].reverse());
+    
     for (let msg of displayMessages) {
         let { nick, text, date, colorClass } = parseMsg(msg);
+
+        let msgHtml = "";
+        if (text) {
+            if (window.marked) {
+                try {
+                    msgHtml = marked.parse(text);
+                } catch (e) {
+                    console.error("Markdown processing error:", e);
+                    msgHtml = text.replace(/</g, "&lt;").replace(/\n/g, "<br>");
+                }
+            } else {
+                msgHtml = text.replace(/</g, "&lt;").replace(/\n/g, "<br>");
+            }
+        }
+        
         chat.innerHTML += `
             <div class="message">
                 <span class="nick ${colorClass}">${nick ? nick : ""}</span>
-                <span class="msg">${(text ?? "").replace(/</g, "&lt;").replace(/\n/g, "<br>")}</span>
+                <span class="msg">${msgHtml}</span>
                 <span class="time">${date ? "[" + date + "]" : ""}</span>
             </div>`;
     }
