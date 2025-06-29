@@ -1,6 +1,6 @@
 <img src=assets/lftl.png style="align=center"></img>
 
-<img src=https://github.com/user-attachments/assets/8bc4bf84-79bf-49b9-8e32-a6d6570649bd style="align=center"></img>
+<img src=https://github.com/user-attachments/assets/27fe4c1e-0835-440e-a7e2-807c983cf9b6 style="align=center"></img>
 
 # What is Snowdrop?
 
