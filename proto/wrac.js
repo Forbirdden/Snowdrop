@@ -1,13 +1,24 @@
         async function wRAC(onOpenCb) {
-            if (!connectedServer) return;
-            if (ws && ws.readyState === 1) return onOpenCb();
-            if (ws) { ws.onclose = null; ws.close(); }
-            ws = new WebSocket(connectedServer);
-            ws.binaryType = "arraybuffer";
-            ws.onopen = function () { if (onOpenCb) onOpenCb(); };
-            ws.onerror = function () { };
-            ws.onclose = function () { };
-            ws.onmessage = function (event) {
+    if (!connectedServer) return;
+    if (ws && ws.readyState === 1) return onOpenCb();
+    
+    if (ws) {
+        ws.onopen = null;
+        ws.onerror = null;
+        ws.onclose = null;
+        ws.onmessage = null;
+        ws.close();
+    }
+    
+    ws = new WebSocket(connectedServer);
+    ws.binaryType = "arraybuffer";
+    
+    ws.onopen = function() { 
+        if (onOpenCb) onOpenCb(); 
+    };
+    ws.onerror = function() {};
+    ws.onclose = function() {};
+    ws.onmessage = function(event) {
                 if (typeof event.data === "string") return;
                 let buf = new Uint8Array(event.data);
                 if (buf.length === 1 && (buf[0] === 0x01 || buf[0] === 0x02)) return;
@@ -73,4 +84,64 @@
         protocolCheck.state = "error";
         updateServerInfoLabels();
     }
+}
+
+async function registerUser({ proto, address, port, username, password }) {
+    return new Promise((resolve, reject) => {
+        const url = buildServerUrl({ proto, address, port });
+        const wsReg = new WebSocket(url);
+        wsReg.binaryType = "arraybuffer";
+        
+        let resolved = false;
+        const timeout = setTimeout(() => {
+            if (!resolved) {
+                resolved = true;
+                wsReg.close();
+                reject(t('connectionTimeout'));
+            }
+        }, 5000);
+        
+        wsReg.onopen = () => {
+            const encoder = new TextEncoder();
+            const data = new Uint8Array([
+                0x03,
+                ...encoder.encode(username + '\n' + password)
+            ]);
+            wsReg.send(data);
+        };
+        
+        wsReg.onmessage = (e) => {
+            clearTimeout(timeout);
+            resolved = true;
+            wsReg.close();
+            
+            const data = new Uint8Array(e.data);
+
+            if (data.length > 0 && data[0] === 0x01) {
+                reject(t('usernameTaken'));
+            } else if (data.length === 0) {
+                resolve(); 
+            } else {
+                reject(t('unexpectedResponse'));
+            }
+        };
+        
+        wsReg.onerror = (error) => {
+            clearTimeout(timeout);
+            if (!resolved) {
+                resolved = true;
+                reject(t('connectionFailed') + ': ' + error.message);
+            }
+        };
+        
+        wsReg.onclose = (event) => {
+            if (!resolved) {
+                clearTimeout(timeout);
+                resolved = true;
+                if (event.code !== 1000) {
+                    reject(t('connectionClosed') + ` (code ${event.code})`);
+                }
+            }
+        };
+    });
 }

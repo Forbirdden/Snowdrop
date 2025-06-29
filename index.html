@@ -34,7 +34,6 @@
             </div>
         </div>
     </div>
-    <!-- Модальное окно добавления/редактирования сервера -->
     <div id="server-modal-bg">
         <form id="server-modal" onsubmit="return false;">
             <label for="modal-server-title" id="label-server-title">Название сервера</label>
@@ -70,12 +69,12 @@
             <div id="server-software-info" style="font-size:0.95em;color:#aaa;margin-top:-8px;margin-bottom:3px;display:none"></div>
             <div id="proto-version-info" style="font-size:0.95em;color:#aaa;margin-top:1px;margin-bottom:3px;display:none"></div>
             <div id="server-modal-btns">
-                <button id="save-server-btn" type="button">Сохранить</button>
-                <button id="cancel-server-btn" type="button">Отмена</button>
-            </div>
+    <button id="register-server-btn" type="button">Регистрация</button>
+        <button id="save-server-btn" type="button">Сохранить</button>
+        <button id="cancel-server-btn" type="button">Отмена</button>
+</div>
         </form>
     </div>
-    <!-- Модальное окно настроек -->
     <div id="settings-modal-bg">
         <form id="settings-modal" onsubmit="return false;">
             <label id="settings-label-lang">Language / Язык</label>
@@ -109,10 +108,11 @@
             </div>
         </form>
     </div>
-    <script src="src/script.js"></script>
-    <script src="proto/wrac.js"></script>
-    <script src="proto/rac.js"></script>
-    <script src="src/chat.js"></script>
-    <script src="src/panel.js"></script>
+    <script src="src/translations.js"></script> 
+    <script src="proto/wrac.js"></script> 
+    <script src="proto/rac.js"></script> 
+    <script src="src/settings.js"></script>
+    <script src="src/panel.js"></script> 
+    <script src="src/chat.js"></script> 
 </body>
 </html>

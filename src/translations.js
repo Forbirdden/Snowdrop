@@ -36,7 +36,11 @@ const translations = {
         protocolChecking: "Проверка версии протокола...",
         serverChecking: "Проверка ПО сервера...",
         protocolVersion: "Версия протокола: {version}",
-        serverSoftware: "ПО сервера: {software}"
+        serverSoftware: "ПО сервера: {software}",
+        register: "Регистрация",
+        fillUsernamePassword: "Введите ник и пароль",
+        registering: "Регистрация...",
+        unknownError: "Никнейм занят, или соединение не удалось"
     },
     en: {
         appName: "Snowdrop",
@@ -75,7 +79,11 @@ const translations = {
         protocolChecking: "Checking protocol version...",
         serverChecking: "Checking server software...",
         protocolVersion: "Protocol version: {version}",
-        serverSoftware: "Server software: {software}"
+        serverSoftware: "Server software: {software}",
+        register: "Register",
+        fillUsernamePassword: "Enter username and password",
+        registering: "Registering...",
+        unknownError: "Username is taken or connection failed"
     }
 };
 
@@ -87,13 +95,3 @@ function t(key, vars = {}) {
     });
     return str;
 }
-
-const nickMarkers = [
-    { marker: "\uB9AC\u3E70", color: "nick-green" },
-    { marker: "\u2550\u2550\u2550", color: "nick-lightred" },
-    { marker: "\u00B0\u0298", color: "nick-lightmagenta" },
-    { marker: "\u2042", color: "nick-gold" },
-    { marker: "\u0D9E", color: "nick-amogus" },
-];
-
-window.onload = () => { fetchMessages(); };

@@ -1,3 +1,11 @@
+const nickMarkers = [
+    { marker: "\uB9AC\u3E70", color: "nick-green" },
+    { marker: "\u2550\u2550\u2550", color: "nick-lightred" },
+    { marker: "\u00B0\u0298", color: "nick-lightmagenta" },
+    { marker: "\u2042", color: "nick-gold" },
+    { marker: "\u0D9E", color: "nick-amogus" },
+];
+
 function extractNickColor(str) {
     let m = str.match(/<([^>]+)>/);
     if (!m) return { nick: "unauth", colorClass: "nick-unauth" };
@@ -115,3 +123,4 @@ document.getElementById('chat-input').addEventListener('keydown', function (e) {
 });
 
 setInterval(fetchMessages, 6000);
+window.onload = () => { fetchMessages(); };
