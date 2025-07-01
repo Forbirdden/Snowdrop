@@ -1,16 +1,30 @@
-# The Snowdrop Messenger
-Roadmap:
+[English](README_EN.md)
 
-- [x] WRAC(S) support
-- [x] User Agents
-- [x] Server list Management
-- [ ] Notifications
-- [ ] Settings
-- [x] Authentication
-- [ ] GitHub repository
-- [ ] Web version
-- [ ] Mobile UI
-- [ ] Mobile version
-- [ ] Proxy for RAC(S)
-- [ ] RAC(S) support
-- [ ] Desktop Version
+<img src=assets/lftl.png style="align=center"></img>
+
+<img src=https://github.com/user-attachments/assets/27fe4c1e-0835-440e-a7e2-807c983cf9b6 style="align=center"></img>
+
+# Что такое Snowdrop?
+
+***Snowdrop Messenger*** - это красивый, современный, многофункциональный и кроссплатформенный мессенджер на базе протокола обмена сообщениями RAC, а также его новейших дополнений
+
+ # Какие преемущества у Snowdrop среди других RAC клиентов?
+
+В ***TSM*** есть уникальные функции, использовать которые можно через удобный графический интерфейс, также ***Snowdrop*** имеет очень малый вес, потому-что написан на чистом JavaScript с использованием своих библиотек и технологий - ВЕСЬ код, что есть в мессенджере СОВЕРШЕННО ТОЧНО используется, никакие строчки не лежат без дела занимая место
+Также присутствует ПОЛНЫЙ ПЕРЕВОД на русский и английский
+
+# Какие различия у разных версий Snowdrop?
+
+| TSM | Web | Desktop | Mobile |
+|---|---|---|---|
+| Нужен выход в интернет | ✅ | ❌ | ❌ |
+| Нужно скачивать | ❌ | ✅ | ✅ |
+| Поддержка WRAC протокола | ✅ | ✅ | ✅ |
+| Поддержка RAC протокола | ❌ | ✅ | ❌ |
+| Поддержка SSL/TLS | ✅ | ✅ | ✅ |
+| Авто-обновление | ❌ | ✅ | ❌ |
+| Бесплатно и открытый код | ✅ | ✅ | ✅ |
+
+# А где скачать?
+
+Пока-что доступна только Web версия, вскоре выйдет Mobile (Android и iOS) и Desktop (ПК)
