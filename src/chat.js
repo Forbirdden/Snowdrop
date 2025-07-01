@@ -5,20 +5,38 @@ const nickMarkers = [
     { marker: "\u2042", color: "nick-gold" },
     { marker: "\u0D9E", color: "nick-amogus" },
 ];
+function extractAvatar(text) {
+    let idx = text.indexOf('\x06');
+    if (idx === -1) return { cleanText: text, avatarUrl: null };
+    let before = text.substring(0, idx);
+    let after = text.substring(idx + 1);
+    const arIdx = after.indexOf('!!AR!!');
+    if (arIdx === -1) return { cleanText: text, avatarUrl: null };
+    let rest = after.substring(arIdx + 6).trim();
+    let link = rest.split(/[\s\n]/)[0];
+    return { cleanText: (before + after.slice(0, arIdx)).trim(), avatarUrl: link };
+}
 
 function extractNickColor(str) {
     let m = str.match(/<([^>]+)>/);
-    if (!m) return { nick: "unauth", colorClass: "nick-unauth" };
+    if (!m) return { nick: "unauth", colorClass: "nick-unauth", isSnowdrop: false };
     let beforeNick = str.substring(0, m.index);
     let nick = m[1];
     let colorClass = "nick-cyan";
+    let isSnowdrop = false;
     for (const { marker, color } of nickMarkers) {
         if (beforeNick.includes(marker)) {
             colorClass = color;
+            if (color === "nick-amogus") isSnowdrop = true;
             break;
         }
     }
-    return { nick, colorClass };
+    return { nick, colorClass, isSnowdrop };
+}
+
+function formatDate(dateStr) {
+    if (!dateStr) return "";
+    return dateStr.replace(/^\[|\]$/g, "");
 }
 
 function parseMsg(msg) {
@@ -26,6 +44,7 @@ function parseMsg(msg) {
     let text = msg.trim();
     let colorClass = "";
     let nick = "";
+    let avatarUrl = null;
 
     let m = text.match(/^\[(\d{2}\.\d{2}\.\d{4} \d{2}:\d{2})\]\s*(.*)$/);
     if (m) {
@@ -46,14 +65,24 @@ function parseMsg(msg) {
         let ext = extractNickColor(prefix);
         nick = ext.nick;
         colorClass = ext.colorClass;
-        text = afterNick;
-        return { nick, text, date, colorClass };
+
+        let avatarRes = extractAvatar(afterNick);
+        avatarUrl = avatarRes.avatarUrl;
+        text = avatarRes.cleanText;
+
+        return { nick, text, date, colorClass, avatarUrl };
     }
 
     if (date && !nick) {
-        return { nick: "unauth", text, date, colorClass: "nick-unauth" };
+        let avatarRes = extractAvatar(text);
+        avatarUrl = avatarRes.avatarUrl;
+        text = avatarRes.cleanText;
+        return { nick: "unauth", text, date, colorClass: "nick-unauth", avatarUrl };
     }
-    return { nick: "unauth", text, date: "", colorClass: "nick-unauth" };
+    let avatarRes = extractAvatar(text);
+    avatarUrl = avatarRes.avatarUrl;
+    text = avatarRes.cleanText;
+    return { nick: "unauth", text, date: "", colorClass: "nick-unauth", avatarUrl };
 }
 
 function getVisibleMessages(messages) {
@@ -69,7 +98,7 @@ if (window.marked) {
         gfm: true,
         smartypants: true
     });
-    
+
     const renderer = new marked.Renderer();
     renderer.link = function(href, title, text) {
         return `<a href="${href}" target="_blank" rel="noopener noreferrer">${text}</a>`;
@@ -81,9 +110,9 @@ function showMessages() {
     let chat = document.getElementById('chat-area');
     chat.innerHTML = '';
     let displayMessages = getVisibleMessages([...messages].reverse());
-    
+
     for (let msg of displayMessages) {
-        let { nick, text, date, colorClass } = parseMsg(msg);
+        let { nick, text, date, colorClass, avatarUrl } = parseMsg(msg);
 
         let msgHtml = "";
         if (text) {
@@ -98,12 +127,22 @@ function showMessages() {
                 msgHtml = text.replace(/</g, "&lt;").replace(/\n/g, "<br>");
             }
         }
-        
+        let avatarBlock = avatarUrl
+            ? `<img class="avatar" src="${avatarUrl}" alt="avatar" loading="lazy">`
+            : `<div class="avatar-fallback ${colorClass}">${nick ? nick[0].toUpperCase() : ''}</div>`;
+
+        let timeHtml = date ? `<span class="time">${formatDate(date)}</span>` : "";
+
         chat.innerHTML += `
             <div class="message">
-                <span class="nick ${colorClass}">${nick ? nick : ""}</span>
-                <span class="msg">${msgHtml}</span>
-                <span class="time">${date ? "[" + date + "]" : ""}</span>
+                <div class="avatar-wrap">
+                    ${avatarBlock}
+                </div>
+                <div class="msg-main">
+                    <span class="nick ${colorClass}">${nick ? nick : ""}</span>
+                    <span class="msg">${msgHtml}</span>
+                    ${timeHtml}
+                </div>
             </div>`;
     }
 }
@@ -118,6 +157,13 @@ function sendMsg() {
         let formatted = format;
         if (formatted.includes("{name}")) formatted = formatted.replace("{name}", username ?? "");
         if (formatted.includes("{text}")) formatted = formatted.replace("{text}", msg ?? "");
+        if (
+            settings.messageFormatPreset === "snowdrop" &&
+            settings.snowdropAvatarUrl &&
+            settings.snowdropAvatarUrl.match(/\.(png|jpg|gif)$/i)
+        ) {
+            formatted += "\x06!!AR!! " + settings.snowdropAvatarUrl;
+        }
         if (username && password) {
             let enc = new TextEncoder();
             let uname = enc.encode(username);

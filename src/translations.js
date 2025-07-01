@@ -40,7 +40,8 @@ const translations = {
         register: "Регистрация",
         fillUsernamePassword: "Введите ник и пароль",
         registering: "Регистрация...",
-        unknownError: "Никнейм занят, или соединение не удалось"
+        unknownError: "Никнейм занят, или соединение не удалось",
+        settingsLabelSnowdropAvatar: "Аватарка (png/jpg/gif):"
     },
     en: {
         appName: "Snowdrop",
@@ -83,7 +84,8 @@ const translations = {
         register: "Register",
         fillUsernamePassword: "Enter username and password",
         registering: "Registering...",
-        unknownError: "Username is taken or connection failed"
+        unknownError: "Username is taken or connection failed",
+        settingsLabelSnowdropAvatar: "Avatar URL (png/jpg/gif):"
     }
 };
 

@@ -152,22 +152,22 @@ body {
     transition: background 0.2s, color 0.2s;
     display: block;
 }
-        #sidebar-footer {
-            text-align: left;
-            margin: 9px 0 0 18px;
-            font-size: 0.81em;
-            color: #999;
-            line-height: 1.33;
-            padding-bottom: 8px;
-        }
-        #sidebar-footer a {
-            color: #5b8fbd;
-            text-decoration: none;
-            font-size: 0.81em;
-        }
-        #add-server-btn {
-            margin-bottom: 7px !important;
-        }
+#sidebar-footer {
+    text-align: left;
+    margin: 9px 0 0 18px;
+    font-size: 0.81em;
+    color: #999;
+    line-height: 1.33;
+    padding-bottom: 8px;
+}
+#sidebar-footer a {
+    color: #5b8fbd;
+    text-decoration: none;
+    font-size: 0.81em;
+}
+#add-server-btn {
+    margin-bottom: 7px !important;
+}
 #main {
     flex: 1;
     display: flex;
@@ -183,45 +183,93 @@ body {
     font-size: 1.09rem;
     line-height: 1.7;
 }
+
 .message {
     display: flex;
-    flex-direction: row;
     align-items: flex-start;
-    padding: 2px 0 2px 0;
-    white-space: pre-wrap;
-    word-break: break-word;
-    min-height: 32px;
+    gap: 10px;
+    padding: 7px 0 7px 0;
+    min-height: 40px;
+    border-bottom: 1px solid rgba(70, 80, 110, 0.08);
+}
+.message:last-child {
+    border-bottom: none;
+}
+.avatar-wrap {
+    width: 42px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    background: #222;
+    display: block;
+}
+.avatar-fallback, .avatar-default {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1.2em;
+    user-select: none;
+    background: #666;
+    object-fit: cover;
+}
+
+.avatar-fallback.nick-green { background: #18b800 !important; color: #0d5e00 !important; }
+.avatar-fallback.nick-lightred { background: #ff9191 !important; color: #a94a4a !important; }
+.avatar-fallback.nick-lightmagenta { background: #e782ff !important; color: #892c9c !important; }
+.avatar-fallback.nick-gold { background: #ffd700 !important; color: #a89600 !important; }
+.avatar-fallback.nick-cyan { background: #5b8fbd !important; color: #27406c !important; }
+.avatar-fallback.nick-unauth { background: #666 !important; color: #222 !important; }
+.avatar-fallback.nick-amogus { background: #aeff00 !important; color: #5e8000 !important; }
+
+.msg-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
 }
 .nick {
-    font-weight: bold;
-    margin-right: 10px;
-    min-width: 130px;
-    text-align: left;
-    flex-shrink: 0;
-    font-family: inherit;
+    font-weight: 600;
+    font-size: 1.03em;
+    line-height: 1.1;
+    display: inline-block;
+    margin-bottom: 0;
+    margin-top: 0.3em;
 }
-.nick-green {}
-.nick-lightred {}
-.nick-lightmagenta {}
-.nick-gold {}
-.nick-cyan {}
-.nick-unauth {}
-.nick-amogus {}
 .msg {
     flex: 1;
     text-align: left;
     font-family: inherit;
     white-space: pre-wrap;
     word-break: break-word;
-    padding-right: 16px;
+    padding-right: 8px;
+    font-size: 1.01em;
+    margin-top: -20px;  
+    margin-bottom: 1px;
+    max-width: 100%;
+    overflow-wrap: break-word;
 }
 .time {
-    font-size: 0.94em;
+    font-size: 0.91em;
     margin-left: 0;
-    min-width: 145px;
+    min-width: 130px;
     text-align: right;
     flex-shrink: 0;
     font-family: inherit;
+    color: #888;
+    margin-top: -100px;
+    margin-bottom: -2px;
+    display: inline-block;
 }
 #chat-input-area {
     display: flex;
@@ -352,7 +400,6 @@ body {
     margin-bottom: 7px;
 }
 
-/* --- DRAG & DROP --- */
 .channel.dragging {
     opacity: 0.5;
     border: 2px dashed #99bbee;

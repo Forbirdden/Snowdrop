@@ -77,29 +77,39 @@
     </div>
     <div id="settings-modal-bg">
         <form id="settings-modal" onsubmit="return false;">
-            <label id="settings-label-lang">Language / Язык</label>
-            <div id="settings-modal-lang-row">
-                <select id="settings-lang-select">
-                    <option value="en">English</option>
-                    <option value="ru">Русский</option>
-                </select>
+            <div class="small-row">
+                <div>
+                    <label id="settings-label-lang">Language / Язык</label>
+                    <select id="settings-lang-select">
+                        <option value="en">English</option>
+                        <option value="ru">Русский</option>
+                    </select>
+                </div>
+                <div>
+                    <label id="settings-label-theme">Тема / Theme</label>
+                    <select id="settings-theme-select">
+                        <option value="dark">Dark</option>
+                        <option value="light">Light</option>
+                    </select>
+                </div>
             </div>
-            <label id="settings-label-theme">Тема / Theme</label>
-            <div id="settings-modal-theme-row">
-                <select id="settings-theme-select">
-                    <option value="dark">Dark</option>
-                    <option value="light">Light</option>
-                </select>
-            </div>
-            <label id="settings-label-format">Message format</label>
-            <input id="settings-format-input" autocomplete="off" maxlength="128">
-            <div class="settings-format-presets">
-                <button type="button" class="settings-format-preset-btn preset-snowdrop" data-format="ඞ&lt;{name}&gt; {text}" data-id="snowdrop">Snowdrop</button>
-                <button type="button" class="settings-format-preset-btn preset-brac" data-format="리㹰&lt;{name}&gt; {text}" data-id="brac">bRAC</button>
-                <button type="button" class="settings-format-preset-btn preset-crab" data-format="═══&lt;{name}&gt; {text}" data-id="crab">CRAB</button>
-                <button type="button" class="settings-format-preset-btn preset-mefidroniy" data-format="°ʘ&lt;{name}&gt; {text}" data-id="mefidroniy">Mefidroniy</button>
-                <button type="button" class="settings-format-preset-btn preset-crack" data-format="⁂&lt;{name}&gt; {text}" data-id="crack">cRACk</button>
-                <button type="button" class="settings-format-preset-btn preset-default" data-format="&lt;{name}&gt; {text}" data-id="default">Default (clRAC)</button>
+            <div class="small-row">
+                <div style="flex:1; min-width: 220px;">
+                    <label for="settings-snowdrop-avatar" id="settings-label-snowdrop-avatar" style="margin-top:0;display:block;">Snowdrop аватар (.png/.jpg/.gif):</label>
+                    <input type="text" id="settings-snowdrop-avatar" autocomplete="off" style="width:100%;" placeholder="https://site/image.png">
+                </div>
+                <div style="flex:2;">
+                    <label id="settings-label-format">Message format</label>
+                    <input id="settings-format-input" autocomplete="off" maxlength="128">
+                    <div class="settings-format-presets">
+                        <button type="button" class="settings-format-preset-btn preset-snowdrop" data-format="ඞ&lt;{name}&gt; {text}" data-id="snowdrop">Snowdrop</button>
+                        <button type="button" class="settings-format-preset-btn preset-brac" data-format="리㹰&lt;{name}&gt; {text}" data-id="brac">bRAC</button>
+                        <button type="button" class="settings-format-preset-btn preset-crab" data-format="═══&lt;{name}&gt; {text}" data-id="crab">CRAB</button>
+                        <button type="button" class="settings-format-preset-btn preset-mefidroniy" data-format="°ʘ&lt;{name}&gt; {text}" data-id="mefidroniy">Mefidroniy</button>
+                        <button type="button" class="settings-format-preset-btn preset-crack" data-format="⁂&lt;{name}&gt; {text}" data-id="crack">cRACk</button>
+                        <button type="button" class="settings-format-preset-btn preset-default" data-format="&lt;{name}&gt; {text}" data-id="default">Default (clRAC)</button>
+                    </div>
+                </div>
             </div>
             <div id="settings-modal-error"></div>
             <div id="settings-modal-btns">
@@ -108,12 +118,12 @@
             </div>
         </form>
     </div>
-    <script src="src/translations.js"></script> 
-    <script src="proto/wrac.js"></script> 
-    <script src="proto/rac.js"></script> 
+    <script src="src/translations.js"></script>
+    <script src="proto/wrac.js"></script>
+    <script src="proto/rac.js"></script>
     <script src="src/settings.js"></script>
-    <script src="src/panel.js"></script> 
-    <script src="lib/marked.min.js"></script> 
-    <script src="src/chat.js"></script> 
+    <script src="src/panel.js"></script>
+    <script src="lib/marked.min.js"></script>
+    <script src="src/chat.js"></script>
 </body>
 </html>

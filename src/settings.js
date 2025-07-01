@@ -10,7 +10,8 @@ const DEFAULT_SETTINGS = {
     lang: "en",
     messageFormat: "ඞ<{name}> {text}",
     messageFormatPreset: "snowdrop",
-    theme: "dark"
+    theme: "dark",
+    snowdropAvatarUrl: ""
 };
 
 function getSettings() {
@@ -66,15 +67,29 @@ const settingsModalPresets = document.querySelectorAll('.settings-format-preset-
 const saveSettingsBtn = document.getElementById('save-settings-btn');
 const cancelSettingsBtn = document.getElementById('cancel-settings-btn');
 const settingsThemeSelect = document.getElementById('settings-theme-select');
+const settingsSnowdropAvatarInput = document.getElementById('settings-snowdrop-avatar');
+const settingsLabelLang = document.getElementById('settings-label-lang');
+const settingsLabelTheme = document.getElementById('settings-label-theme');
+const settingsLabelFormat = document.getElementById('settings-label-format');
+const settingsLabelSnowdropAvatar = document.getElementById('settings-label-snowdrop-avatar');
 
 function updateSettingsModalFields() {
     settingsLangSelect.value = settings.lang || "ru";
     settingsFormatInput.value = settings.messageFormat || DEFAULT_SETTINGS.messageFormat;
     settingsThemeSelect.value = settings.theme || "dark";
+    settingsSnowdropAvatarInput.value = settings.snowdropAvatarUrl || "";
     let id = getCurrentFormatPresetId(settingsFormatInput.value);
     settingsModalPresets.forEach(btn => {
         btn.classList.toggle("selected", btn.dataset.id === id);
     });
+
+    settingsLabelLang.textContent = t("settingsLabelLang");
+    settingsLabelTheme.textContent = t("settingsLabelTheme");
+    settingsLabelFormat.textContent = t("settingsLabelFormat");
+    settingsLabelSnowdropAvatar.textContent = t("settingsLabelSnowdropAvatar");
+    settingsSnowdropAvatarInput.placeholder = t("settingsPlaceholderSnowdropAvatar");
+    saveSettingsBtn.textContent = t("settingsSave");
+    cancelSettingsBtn.textContent = t("settingsCancel");
 }
 
 function openSettingsModal() {
@@ -104,12 +119,20 @@ saveSettingsBtn.onclick = function () {
     const lang = settingsLangSelect.value;
     const format = settingsFormatInput.value.trim();
     const theme = settingsThemeSelect.value;
+    const snowdropAvatarUrl = settingsSnowdropAvatarInput.value.trim();
+
+    if (snowdropAvatarUrl && !snowdropAvatarUrl.match(/\.(png|jpg|gif)$/i)) {
+        settingsModalError.textContent = t("settingsInvalidSnowdropAvatar") || "Ссылка на Snowdrop-аватарку должна заканчиваться на .png, .jpg или .gif";
+        settingsSnowdropAvatarInput.focus();
+        return;
+    }
     settings = {
         ...settings,
         lang,
         messageFormat: format,
         messageFormatPreset: getCurrentFormatPresetId(format) || null,
-        theme
+        theme,
+        snowdropAvatarUrl
     };
     saveSettings(settings);
     applyTheme(theme);
@@ -128,3 +151,5 @@ settingsModalBg.addEventListener("click", function (e) {
 });
 
 applyTheme(settings.theme);
+
+if (window.updateUIStrings) window.updateUIStrings();
