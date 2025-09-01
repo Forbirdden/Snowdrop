@@ -133,17 +133,19 @@ function showMessages() {
 
         let timeHtml = date ? `<span class="time">${formatDate(date)}</span>` : "";
 
-        chat.innerHTML += `
-            <div class="message">
-                <div class="avatar-wrap">
-                    ${avatarBlock}
-                </div>
-                <div class="msg-main">
-                    <span class="nick ${colorClass}">${nick ? nick : ""}</span>
-                    <span class="msg">${msgHtml}</span>
-                    ${timeHtml}
-                </div>
-            </div>`;
+chat.innerHTML += `
+    <div class="message">
+        <div class="avatar-wrap">
+            ${avatarBlock}
+        </div>
+        <div class="msg-main">
+            <div class="nick-time-row">
+                <span class="nick ${colorClass}">${nick ? nick : ""}</span>
+                ${timeHtml}
+            </div>
+            <div class="msg">${msgHtml}</div>
+        </div>
+    </div>`;
     }
 }
 
@@ -162,7 +164,7 @@ function sendMsg() {
             settings.snowdropAvatarUrl &&
             settings.snowdropAvatarUrl.match(/\.(png|jpg|gif)$/i)
         ) {
-            formatted += "\x06!!AR!! " + settings.snowdropAvatarUrl;
+            formatted += "\x06!!AR!!" + settings.snowdropAvatarUrl;
         }
         if (username && password) {
             let enc = new TextEncoder();
@@ -198,5 +200,5 @@ document.getElementById('chat-input').addEventListener('keydown', function (e) {
     if (e.key === "Enter") sendMsg();
 });
 
-setInterval(fetchMessages, 6000);
+setInterval(fetchMessages, 3000);
 window.onload = () => { fetchMessages(); };

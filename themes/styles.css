@@ -184,24 +184,68 @@ body {
     line-height: 1.7;
 }
 
+/* Обновленные стили для сообщения */
 .message {
     display: flex;
     align-items: flex-start;
     gap: 10px;
-    padding: 7px 0 7px 0;
+    padding: 7px 0;
     min-height: 40px;
     border-bottom: 1px solid rgba(70, 80, 110, 0.08);
 }
 .message:last-child {
     border-bottom: none;
 }
+
+.nick-time-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2px;
+    width: 100%;
+}
+
+.nick {
+    font-weight: 600;
+    font-size: 1.03em;
+    line-height: 1.1;
+    display: inline-block;
+    margin-bottom: 0;
+    flex-shrink: 0;
+}
+
+.time {
+    font-size: 0.91em;
+    font-family: inherit;
+    color: #888;
+    flex-shrink: 0;
+    margin-left: 10px;
+    white-space: nowrap;
+}
+
+.msg {
+    flex: 1;
+    text-align: left;
+    font-family: inherit;
+    white-space: pre-wrap;
+    word-break: break-word;
+    padding-right: 8px;
+    font-size: 1.01em;
+    margin-top: -25px;
+    margin-bottom: 1px;
+    max-width: 100%;
+    overflow-wrap: break-word;
+}
+
 .avatar-wrap {
     width: 42px;
     flex-shrink: 0;
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
+    padding-top: 3px; /* Выравнивание аватарки с текстом */
 }
+
 .avatar {
     width: 36px;
     height: 36px;
@@ -210,6 +254,7 @@ body {
     background: #222;
     display: block;
 }
+
 .avatar-fallback, .avatar-default {
     width: 36px;
     height: 36px;
@@ -238,39 +283,7 @@ body {
     display: flex;
     flex-direction: column;
 }
-.nick {
-    font-weight: 600;
-    font-size: 1.03em;
-    line-height: 1.1;
-    display: inline-block;
-    margin-bottom: 0;
-    margin-top: 0.3em;
-}
-.msg {
-    flex: 1;
-    text-align: left;
-    font-family: inherit;
-    white-space: pre-wrap;
-    word-break: break-word;
-    padding-right: 8px;
-    font-size: 1.01em;
-    margin-top: -20px;  
-    margin-bottom: 1px;
-    max-width: 100%;
-    overflow-wrap: break-word;
-}
-.time {
-    font-size: 0.91em;
-    margin-left: 0;
-    min-width: 130px;
-    text-align: right;
-    flex-shrink: 0;
-    font-family: inherit;
-    color: #888;
-    margin-top: -100px;
-    margin-bottom: -2px;
-    display: inline-block;
-}
+
 #chat-input-area {
     display: flex;
     flex-direction: column;
