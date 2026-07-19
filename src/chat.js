@@ -52,16 +52,11 @@ function parseMsg(msg) {
         text = m[2];
     }
 
-    let start = text.indexOf('<');
-    let end = text.indexOf('>');
-    if (start !== -1 && end !== -1 && end > start) {
-        text = text.slice(0, start) + text.slice(end + 1);
-    }
-
     let nickMatch = text.match(/^(.*?<[^>]+>)(\s?)(.*)$/);
     if (nickMatch) {
         let prefix = nickMatch[1];
         let afterNick = nickMatch[3];
+        
         let ext = extractNickColor(prefix);
         nick = ext.nick;
         colorClass = ext.colorClass;
@@ -79,6 +74,7 @@ function parseMsg(msg) {
         text = avatarRes.cleanText;
         return { nick: "unauth", text, date, colorClass: "nick-unauth", avatarUrl };
     }
+    
     let avatarRes = extractAvatar(text);
     avatarUrl = avatarRes.avatarUrl;
     text = avatarRes.cleanText;

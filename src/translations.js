@@ -41,7 +41,9 @@ const translations = {
         fillUsernamePassword: "Введите ник и пароль",
         registering: "Регистрация...",
         unknownError: "Никнейм занят, или соединение не удалось",
-        settingsLabelSnowdropAvatar: "Аватарка (png/jpg/gif):"
+        registrationSuccess: "Успешно создан аккаунт",
+        settingsLabelSnowdropAvatar: "Ссылка на аватарку (png/jpg/gif):",
+        settingsPlaceholderSnowdropAvatar: "https://example.com/racavatar.png" 
     },
     en: {
         appName: "Snowdrop",
@@ -85,7 +87,9 @@ const translations = {
         fillUsernamePassword: "Enter username and password",
         registering: "Registering...",
         unknownError: "Username is taken or connection failed",
-        settingsLabelSnowdropAvatar: "Avatar URL (png/jpg/gif):"
+        registrationSuccess: "Sucessfully made an account",
+        settingsLabelSnowdropAvatar: "Avatar URL (png/jpg/gif):",
+        settingsPlaceholderSnowdropAvatar: "https://example.com/racavatar.png" 
     }
 };
 
