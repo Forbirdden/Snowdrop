@@ -181,20 +181,22 @@ function renderChannels() {
         };
         div.querySelector('.edit-server-btn').onclick = function (e) {
             e.stopPropagation();
-            openEditModal(idx);
+            openServerModal(idx);
         };
         channels.appendChild(div);
     });
 }
 
-function openEditModal(idx) {
-    const srv = servers[idx];
-    modalTitle.value = srv.title || "";
-    modalAddress.value = srv.address || "";
-    modalPort.value = srv.port || "";
-    modalProto.value = srv.proto || "wRACs";
-    modalUsername.value = srv.username || "";
-    modalPassword.value = srv.password || "";
+function openServerModal(idx = null, prefill = null) {
+    const srv = idx !== null ? servers[idx] : null;
+
+    modalTitle.value = srv?.title || "";
+    modalAddress.value = srv?.address || prefill?.address || "";
+    modalPort.value = srv?.port || prefill?.port || "";
+    modalProto.value = srv?.proto || prefill?.proto || "wRACs";
+    modalUsername.value = srv?.username || "";
+    modalPassword.value = srv?.password || "";
+    modalNotify.value = srv?.notify || "global";
     modalError.textContent = "";
     modalBg.style.display = "flex";
     setTimeout(() => modalTitle.focus(), 50);
@@ -226,6 +228,7 @@ function openEditModal(idx) {
         const proto = modalProto.value;
         const username = modalUsername.value.trim();
         const password = modalPassword.value;
+        const notify = modalNotify.value;
         if (!title || !address || !port || !proto) {
             modalError.textContent = t('fillAllFields');
             return;
@@ -242,13 +245,23 @@ function openEditModal(idx) {
             modalError.textContent = t('invalidPort');
             return;
         }
-        if (servers.some((srv2, i) => i !== idx && srv2.proto === proto && srv2.address === address && srv2.port === port)) {
+        const isDuplicate = idx !== null
+            ? servers.some((srv2, i) => i !== idx && srv2.proto === proto && srv2.address === address && srv2.port === port)
+            : servers.some(srv2 => srv2.proto === proto && srv2.address === address && srv2.port === port);
+        if (isDuplicate) {
             modalError.textContent = t('duplicateServer');
             return;
         }
-        servers[idx] = { title, proto, address, port, username, password };
+
+        const newServer = { title, proto, address, port, username, password, notify };
+        const targetIdx = idx !== null ? idx : servers.length;
+        if (idx !== null) {
+            servers[idx] = newServer;
+        } else {
+            servers.push(newServer);
+        }
         saveServers(servers);
-        connectedServer = buildServerUrl(servers[idx]);
+        connectedServer = buildServerUrl(servers[targetIdx]);
         closeModal();
         renderChannels();
         fetchMessages();
@@ -273,6 +286,7 @@ const modalPort = document.getElementById('modal-server-port');
 const modalProto = document.getElementById('modal-server-proto');
 const modalUsername = document.getElementById('modal-server-username');
 const modalPassword = document.getElementById('modal-server-password');
+const modalNotify = document.getElementById('modal-server-notify');
 const modalError = document.getElementById('server-modal-error');
 const saveBtn = document.getElementById('save-server-btn');
 const cancelBtn = document.getElementById('cancel-server-btn');
@@ -314,80 +328,13 @@ registerBtn.onclick = async function() {
     }
 };
 
-function openModal() {
-    modalTitle.value = "";
-    modalAddress.value = "";
-    modalPort.value = "";
-    modalProto.value = "wRACs";
-    modalUsername.value = "";
-    modalPassword.value = "";
-    modalError.textContent = "";
-    modalBg.style.display = "flex";
-    setTimeout(() => modalTitle.focus(), 50);
-
-    protocolCheck.state = "idle";
-    updateServerInfoLabels();
-
-    function triggerCheck() {
-        if (modalAddress.value && modalPort.value && modalProto.value) {
-            checkServerInfo({
-                proto: modalProto.value,
-                address: modalAddress.value,
-                port: modalPort.value
-            });
-        } else {
-            protocolCheck.state = "idle";
-            updateServerInfoLabels();
-        }
-    }
-    modalAddress.oninput = triggerCheck;
-    modalPort.oninput = triggerCheck;
-    modalProto.onchange = triggerCheck;
-    triggerCheck();
-
-    saveBtn.onclick = function () {
-        const title = modalTitle.value.trim();
-        const address = modalAddress.value.trim();
-        const port = modalPort.value.trim();
-        const proto = modalProto.value;
-        const username = modalUsername.value.trim();
-        const password = modalPassword.value;
-        if (!title || !address || !port || !proto) {
-            modalError.textContent = t('fillAllFields');
-            return;
-        }
-        if (!/^[a-zA-Z0-9а-яА-Я\-\.\s_]+$/.test(title)) {
-            modalError.textContent = t('invalidTitle');
-            return;
-        }
-        if (!/^[a-zA-Z0-9\-\.]+$/.test(address)) {
-            modalError.textContent = t('invalidAddress');
-            return;
-        }
-        if (!/^\d+$/.test(port) || +port < 1 || +port > 65535) {
-            modalError.textContent = t('invalidPort');
-            return;
-        }
-        if (servers.some(srv => srv.proto === proto && srv.address === address && srv.port === port)) {
-            modalError.textContent = t('duplicateServer');
-            return;
-        }
-        servers.push({ title, proto, address, port, username, password });
-        saveServers(servers);
-        connectedServer = buildServerUrl(servers[servers.length - 1]);
-        closeModal();
-        renderChannels();
-        fetchMessages();
-    };
-}
-
 function closeModal() {
     modalBg.style.display = "none";
     protocolCheck.state = "idle";
     updateServerInfoLabels();
 }
 
-document.getElementById('add-server-btn').onclick = openModal;
+document.getElementById('add-server-btn').onclick = () => openServerModal(null);
 cancelBtn.onclick = closeModal;
 
 function updateUIStrings() {
@@ -401,6 +348,11 @@ function updateUIStrings() {
     document.getElementById('label-server-proto').textContent = t('protocol');
     document.getElementById('label-server-username').textContent = t('username');
     document.getElementById('label-server-password').textContent = t('password');
+    document.getElementById('label-server-notify').textContent = t('labelServerNotify');
+    document.getElementById('modal-server-notify-global').textContent = t('notifyOverrideGlobal');
+    document.getElementById('modal-server-notify-none').textContent = t('notifyModeNone');
+    document.getElementById('modal-server-notify-ping').textContent = t('notifyModePing');
+    document.getElementById('modal-server-notify-all').textContent = t('notifyModeAll');
     document.getElementById('save-server-btn').textContent = t('save');
     document.getElementById('cancel-server-btn').textContent = t('cancel');
     document.getElementById('settings-label-lang').textContent = t('settingsLabelLang');
@@ -408,6 +360,12 @@ function updateUIStrings() {
     document.getElementById('settings-label-theme').textContent = t('settingsLabelTheme') || "Theme";
     document.getElementById('chat-input').placeholder = t('writeMessage');
     document.getElementById('send-btn').title = t('send');
+    document.getElementById('attach-btn').title = t('attachTitle');
+    document.getElementById('attach-tab-upload-btn').textContent = t('tabUpload');
+    document.getElementById('attach-tab-favorites-btn').textContent = t('tabFavorites');
+    document.getElementById('attach-dropzone').querySelector('span').textContent = t('dropHint');
+    document.getElementById('favorites-empty').textContent = t('favoritesEmpty');
+    document.getElementById('attach-alt-services-hint').textContent = t('uploadAlternativesHint');
     renderChannels();
 }
 

@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>Snowdrop Messenger</title>
     <link rel="stylesheet" href="themes/styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 </head>
 <body>
     <div id="app-container">
@@ -26,6 +29,7 @@
             <div id="chat-area"></div>
             <div id="chat-input-area">
                 <div id="chat-input-row">
+                    <button id="attach-btn" type="button" title="Прикрепить">+</button>
                     <input id="chat-input" type="text" autocomplete="off" placeholder="Написать сообщение...">
                     <button id="send-btn" title="Отправить">
                         <svg fill="#000000" viewBox="0 0 24 24" id="send" data-name="Flat Line" xmlns="http://www.w3.org/2000/svg" class="icon flat-line"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><path id="secondary" d="M5.44,4.15l14.65,7a1,1,0,0,1,0,1.8l-14.65,7A1,1,0,0,1,4.1,18.54l2.72-6.13a1.06,1.06,0,0,0,0-.82L4.1,5.46A1,1,0,0,1,5.44,4.15Z" style="fill: #ffffff; stroke-width: 2;"></path><path id="primary" d="M7,12h4M4.1,5.46l2.72,6.13a1.06,1.06,0,0,1,0,.82L4.1,18.54a1,1,0,0,0,1.34,1.31l14.65-7a1,1,0,0,0,0-1.8L5.44,4.15A1,1,0,0,0,4.1,5.46Z" style="fill: none; stroke: #ffffff; stroke-linecap: round; stroke-linejoin: round; stroke-width: 2;"></path></g></svg>
@@ -51,9 +55,16 @@
             <label for="modal-server-proto" id="label-server-proto">Протокол</label>
             <select id="modal-server-proto" required>
                 <option value="wRACs">wRACs</option>
-                <option value="wRAC">wRAC (open snowdrop using http://)</option>
+                <option value="wRAC">wRAC</option>
                 <option value="RACs">RACs (WIP)</option>
                 <option value="RAC">RAC (WIP)</option>
+            </select>
+            <label for="modal-server-notify" id="label-server-notify">Уведомления</label>
+            <select id="modal-server-notify">
+                <option value="global" id="modal-server-notify-global">Глобально</option>
+                <option value="none" id="modal-server-notify-none">Нет</option>
+                <option value="ping" id="modal-server-notify-ping">Пинг</option>
+                <option value="all" id="modal-server-notify-all">Всё</option>
             </select>
             <div class="small-row">
                 <div>
@@ -69,10 +80,12 @@
             <div id="server-software-info" style="font-size:0.95em;color:#aaa;margin-top:-8px;margin-bottom:3px;display:none"></div>
             <div id="proto-version-info" style="font-size:0.95em;color:#aaa;margin-top:1px;margin-bottom:3px;display:none"></div>
             <div id="server-modal-btns">
-    <button id="register-server-btn" type="button">Регистрация</button>
-        <button id="save-server-btn" type="button">Сохранить</button>
-        <button id="cancel-server-btn" type="button">Отмена</button>
-</div>
+                <button id="register-server-btn" type="button">Регистрация</button>
+                <div>
+                    <button id="save-server-btn" type="button">Сохранить</button>
+                    <button id="cancel-server-btn" type="button">Отмена</button>
+                </div>
+            </div>
         </form>
     </div>
     <div id="settings-modal-bg">
@@ -90,6 +103,23 @@
                     <select id="settings-theme-select">
                         <option value="dark">Dark</option>
                         <option value="light">Light</option>
+                    </select>
+                </div>
+            </div>
+            <div class="small-row">
+                <div>
+                    <label id="settings-label-notify-mode">Уведомления</label>
+                    <select id="settings-notify-mode-select">
+                        <option value="none" id="settings-notify-mode-none">Нет</option>
+                        <option value="ping" id="settings-notify-mode-ping">Пинг</option>
+                        <option value="all" id="settings-notify-mode-all">Всё</option>
+                    </select>
+                </div>
+                <div>
+                    <label id="settings-label-notify-scope">Откуда</label>
+                    <select id="settings-notify-scope-select">
+                        <option value="current" id="settings-notify-scope-current">Текущий</option>
+                        <option value="all" id="settings-notify-scope-all">Все</option>
                     </select>
                 </div>
             </div>
@@ -118,12 +148,44 @@
             </div>
         </form>
     </div>
-    <script src="src/translations.js"></script>
+    <div id="attach-modal-bg">
+        <div id="attach-modal">
+            <div id="attach-modal-header">
+                <div id="attach-tabs">
+                    <button type="button" id="attach-tab-upload-btn" class="attach-tab-btn selected">Загрузка</button>
+                    <button type="button" id="attach-tab-favorites-btn" class="attach-tab-btn">Избранное</button>
+                </div>
+                <button type="button" id="attach-close-btn" title="Закрыть">&times;</button>
+            </div>
+            <div id="attach-panel-upload">
+                <div id="attach-dropzone">
+                    <span>Перетащите файл сюда или нажмите, чтобы выбрать</span>
+                </div>
+                <input type="file" id="attach-file-input" multiple accept="image/*,video/*" hidden>
+                <div id="attach-upload-status"></div>
+                <div id="attach-alt-services">
+                    <div id="attach-alt-services-hint"></div>
+                    <div id="attach-alt-services-links">
+                        <a href="https://imgur.com/upload" target="_blank" rel="noopener noreferrer">imgur.com</a>
+                        <a href="https://catbox.moe/" target="_blank" rel="noopener noreferrer">catbox.moe</a>
+                        <a href="https://postimages.org/" target="_blank" rel="noopener noreferrer">postimages.org</a>
+                        <a href="https://imgbb.com/" target="_blank" rel="noopener noreferrer">imgbb.com</a>
+                    </div>
+                </div>
+            </div>
+            <div id="attach-panel-favorites">
+                <div id="favorites-grid"></div>
+                <div id="favorites-empty">Пока пусто. Наведите на картинку/видео в чате и нажмите на звёздочку, чтобы добавить сюда.</div>
+            </div>
+        </div>
+    </div>
     <script src="proto/wrac.js"></script>
     <script src="proto/rac.js"></script>
+    <script src="src/translations.js"></script>
     <script src="src/settings.js"></script>
     <script src="src/panel.js"></script>
-    <script src="lib/marked.min.js"></script>
+    <script src="src/attach.js"></script>
     <script src="src/chat.js"></script>
+    <script src="lib/marked.min.js"></script>
 </body>
 </html>

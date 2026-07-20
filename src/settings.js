@@ -11,7 +11,9 @@ const DEFAULT_SETTINGS = {
     messageFormat: "ඞ<{name}> {text}",
     messageFormatPreset: "snowdrop",
     theme: "dark",
-    snowdropAvatarUrl: ""
+    snowdropAvatarUrl: "",
+    notifyMode: "none",
+    notifyScope: "current"
 };
 
 function getSettings() {
@@ -68,16 +70,22 @@ const saveSettingsBtn = document.getElementById('save-settings-btn');
 const cancelSettingsBtn = document.getElementById('cancel-settings-btn');
 const settingsThemeSelect = document.getElementById('settings-theme-select');
 const settingsSnowdropAvatarInput = document.getElementById('settings-snowdrop-avatar');
+const settingsNotifyModeSelect = document.getElementById('settings-notify-mode-select');
+const settingsNotifyScopeSelect = document.getElementById('settings-notify-scope-select');
 const settingsLabelLang = document.getElementById('settings-label-lang');
 const settingsLabelTheme = document.getElementById('settings-label-theme');
 const settingsLabelFormat = document.getElementById('settings-label-format');
 const settingsLabelSnowdropAvatar = document.getElementById('settings-label-snowdrop-avatar');
+const settingsLabelNotifyMode = document.getElementById('settings-label-notify-mode');
+const settingsLabelNotifyScope = document.getElementById('settings-label-notify-scope');
 
 function updateSettingsModalFields() {
     settingsLangSelect.value = settings.lang || "ru";
     settingsFormatInput.value = settings.messageFormat || DEFAULT_SETTINGS.messageFormat;
     settingsThemeSelect.value = settings.theme || "dark";
     settingsSnowdropAvatarInput.value = settings.snowdropAvatarUrl || "";
+    settingsNotifyModeSelect.value = settings.notifyMode || DEFAULT_SETTINGS.notifyMode;
+    settingsNotifyScopeSelect.value = settings.notifyScope || DEFAULT_SETTINGS.notifyScope;
     let id = getCurrentFormatPresetId(settingsFormatInput.value);
     settingsModalPresets.forEach(btn => {
         btn.classList.toggle("selected", btn.dataset.id === id);
@@ -88,6 +96,13 @@ function updateSettingsModalFields() {
     settingsLabelFormat.textContent = t("settingsLabelFormat");
     settingsLabelSnowdropAvatar.textContent = t("settingsLabelSnowdropAvatar");
     settingsSnowdropAvatarInput.placeholder = t("settingsPlaceholderSnowdropAvatar");
+    settingsLabelNotifyMode.textContent = t("settingsLabelNotifyMode");
+    settingsLabelNotifyScope.textContent = t("settingsLabelNotifyScope");
+    document.getElementById('settings-notify-mode-none').textContent = t("notifyModeNone");
+    document.getElementById('settings-notify-mode-ping').textContent = t("notifyModePing");
+    document.getElementById('settings-notify-mode-all').textContent = t("notifyModeAll");
+    document.getElementById('settings-notify-scope-current').textContent = t("notifyScopeCurrent");
+    document.getElementById('settings-notify-scope-all').textContent = t("notifyScopeAll");
     saveSettingsBtn.textContent = t("settingsSave");
     cancelSettingsBtn.textContent = t("settingsCancel");
 }
@@ -120,6 +135,8 @@ saveSettingsBtn.onclick = function () {
     const format = settingsFormatInput.value.trim();
     const theme = settingsThemeSelect.value;
     const snowdropAvatarUrl = settingsSnowdropAvatarInput.value.trim();
+    const notifyMode = settingsNotifyModeSelect.value;
+    const notifyScope = settingsNotifyScopeSelect.value;
 
     if (snowdropAvatarUrl && !snowdropAvatarUrl.match(/\.(png|jpg|gif)$/i)) {
         settingsModalError.textContent = t("settingsInvalidSnowdropAvatar") || "Ссылка на Snowdrop-аватарку должна заканчиваться на .png, .jpg или .gif";
@@ -132,10 +149,19 @@ saveSettingsBtn.onclick = function () {
         messageFormat: format,
         messageFormatPreset: getCurrentFormatPresetId(format) || null,
         theme,
-        snowdropAvatarUrl
+        snowdropAvatarUrl,
+        notifyMode,
+        notifyScope
     };
     saveSettings(settings);
     applyTheme(theme);
+    if (notifyMode !== "none" && window.Notification && Notification.permission === "default") {
+        Notification.requestPermission().then(perm => {
+            if (perm !== "granted") {
+                settingsModalError.textContent = t("notifyPermissionDenied");
+            }
+        });
+    }
     closeSettingsModal();
     if (window.updateUIStrings) window.updateUIStrings();
 };
