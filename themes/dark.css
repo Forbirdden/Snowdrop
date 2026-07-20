@@ -165,3 +165,68 @@ body {
 #server-modal-error.info {
     color: #5b8fbd;
 }
+
+#attach-btn {
+    background: #23272a;
+    color: #5b8fbd;
+}
+#attach-btn:hover {
+    background: #222e39;
+    color: #fff;
+}
+#attach-modal {
+    background: #15171b;
+    color: #ddd;
+}
+.attach-tab-btn {
+    background: #23272a;
+    color: #aaa;
+}
+.attach-tab-btn.selected {
+    background: #5b8fbd;
+    color: #fff;
+}
+#attach-close-btn {
+    color: #aaa;
+}
+#attach-close-btn:hover {
+    color: #fff;
+}
+#attach-dropzone {
+    color: #aaa;
+    background: #1b1d21;
+}
+.favorite-item {
+    background: #23272a;
+}
+#favorites-empty {
+    color: #888;
+}
+#attach-alt-services-hint {
+    color: #aaa;
+}
+#attach-alt-services-links a {
+    background: #23272a;
+    color: #5b8fbd;
+}
+#attach-alt-services-links a:hover {
+    background: #222e39;
+    color: #fff;
+}
+.server-link-card {
+    background: #1b1d21;
+    border: 1px solid #2a2e33;
+}
+.server-link-card-address {
+    color: #ccc;
+}
+.server-link-card-info {
+    color: #999;
+}
+.server-link-card-add-btn {
+    background: #5b8fbd;
+    color: #fff;
+}
+.server-link-card-add-btn:hover {
+    background: #3976a1;
+}

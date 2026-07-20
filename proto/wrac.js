@@ -66,9 +66,9 @@
             }
             let versionByte = arr[0];
             let ver = "";
-            if (versionByte === 0x01) ver = "v1";
-            else if (versionByte === 0x02) ver = "x1.99";
-            else if (versionByte === 0x03) ver = "v2";
+            if (versionByte === 0x01) ver = "1.0";
+            else if (versionByte === 0x02) ver = "1.99";
+            else if (versionByte === 0x03) ver = "2.0";
             else ver = "Unknown";
             protocolCheck.protoVersion = ver;
             protocolCheck.serverSoftware = new TextDecoder().decode(arr.slice(1));
